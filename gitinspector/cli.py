@@ -22,16 +22,16 @@ def run_cli() -> argparse.Namespace:
     parser.add_argument(
         "--since",
         type=str,
-        help="Start date (YYYY-MM_DD)"
+        help="Start date (YYYY-MM-DD)"
     )
     parser.add_argument(
         "--until",
         type=str,
-        help="End date (YYYY-MM_DD)"
+        help="End date (YYYY-MM-DD)"
     )
     # Filter by authors
     parser.add_argument(
-        "-a", "--author",
+        "-a", "--authors",
         type=str,
         help="Comma-separated list of authors"
     )
@@ -39,13 +39,13 @@ def run_cli() -> argparse.Namespace:
     parser.add_argument(
         "-p", "--plot",
         action="store_true",
-        help="Generate aa plot of the selected metric"
+        help="Generate a plot of the selected metric"
     )
     # Save output to a file
     parser.add_argument(
         "--save",
         type=Path,
-        help="Saave plot or metrics to a file (e.g., output.png or data.json)"
+        help="Save plot or metrics to a file (e.g., output.png or data.json)"
     )
 
     return parser.parse_args()
