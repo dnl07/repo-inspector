@@ -1,0 +1,1 @@
+EXTENSIONS_BLACKLIST = {".png", ".jpg", ".jpeg", ".exe", ".dll", ".mcb", ".jar", ".zip", ".mgcb"}

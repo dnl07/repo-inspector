@@ -1,5 +1,6 @@
 from datetime import datetime
 from collections import Counter
+from .constants import EXTENSIONS_BLACKLIST
 
 def check_datetime(date_str: str) -> None:
     if date_str is None:
@@ -9,9 +10,6 @@ def check_datetime(date_str: str) -> None:
         datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
         raise ValueError(f"{date_str} is not a valid date") 
-
-def split_authors(authors: str) -> list[str]:
-    return []
 
 def normalize_authors(commits):
     email_to_names = {}
@@ -31,3 +29,19 @@ def normalize_authors(commits):
         canonical_names[email] = most_common_name
     
     return canonical_names
+
+def get_stats_from_commit(commit):
+    insertions = 0
+    deletions = 0
+
+    for filename, filestats in commit.stats.files.items():
+        if not is_text_file(filename):
+            continue
+
+        insertions += filestats["insertions"]
+        deletions += filestats["deletions"]
+
+    return insertions, deletions, insertions + deletions
+
+def is_text_file(filename: str) -> bool:
+    return not any(filename.lower().endswith(ext) for ext in EXTENSIONS_BLACKLIST)

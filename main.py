@@ -20,7 +20,14 @@ def main() -> None:
     utils.check_datetime(args.since)
     utils.check_datetime(args.until)
 
-    commits = get_commits(repo, args.since, args.until, args.authors)
+    if args.branches == "all":
+        branches = [b.name for b in repo.branches]
+    elif args.branches:
+        branches = args.branches.replace(" ", "").split(",")
+    else:
+        branches = [repo.active_branch.name]
+
+    commits = get_commits(repo, branches, args.since, args.until, args.authors)
 
     if (args.plot):
         if (args.metric == "commits"):
@@ -32,6 +39,10 @@ def main() -> None:
         elif (args.metric == "authors"):
             author_stats = analysis.lines_per_author(commits)
             plot.plot_author_pie(author_stats, args.save)
+            plot.plot_author_bar(author_stats, args.save)
+        elif (args.metric == "files"):
+            author_stats = analysis.changes_per_files(commits)
+            plot.plot_files_bar(author_stats, args.save)
 
 if __name__ == "__main__":
     main()

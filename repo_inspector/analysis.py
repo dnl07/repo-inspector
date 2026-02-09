@@ -16,15 +16,18 @@ def lines_per_day(commits):
     daily = {}
 
     for c in commits:
+        if len(c.parents) > 1: 
+            continue
+
         day = c.committed_datetime.date()
-        stats = c.stats.total
+        insertions, deletions, total = utils.get_stats_from_commit(c)
 
         if day not in daily:
             daily[day] = {"insertions": 0, "deletions": 0, "total": 0}
 
-        daily[day]["insertions"] += stats["insertions"]
-        daily[day]["deletions"] += stats["deletions"]
-        daily[day]["total"] += stats["lines"]
+        daily[day]["insertions"] += insertions
+        daily[day]["deletions"] += deletions
+        daily[day]["total"] += total
 
     # Sort all
     sorted_dates = sorted(daily.keys())
@@ -39,28 +42,58 @@ def lines_per_author(commits):
     names = utils.normalize_authors(commits)
 
     for c in commits:
+        if len(c.parents) > 1: 
+            continue
+
         author = names[c.author.email.lower()]
-        stats = c.stats.total
+        insertions, deletions, total = utils.get_stats_from_commit(c)
 
         if author not in authors:
             authors[author] = {"insertions": 0, "deletions": 0, "total": 0}
 
-        authors[author]["insertions"] += stats["insertions"]
-        authors[author]["deletions"] += stats["deletions"]
-        authors[author]["total"] += stats["lines"]
+        authors[author]["insertions"] += insertions
+        authors[author]["deletions"] += deletions
+        authors[author]["total"] += total
 
     return authors
 
-def analyze_files(commits):
-    files_data = []
+def commits_per_author(commits):
+    authors = {}
+    names = utils.normalize_authors(commits)
 
     for c in commits:
-        for filename, stats in c.stats.files.items():
-            files_data.append({
-                "file": filename,
-                "insertions": stats.total["insertions"],
-                "deletions": stats.total["deletions"],
-                "total_lines": stats.total["lines"]
-            })
+        if len(c.parents) > 1: 
+            continue
 
-    return files_data 
+        author = names[c.author.email.lower()]
+        insertions, deletions, total = utils.get_stats_from_commit(c)
+
+        if author not in authors:
+            authors[author] = {"insertions": 0, "deletions": 0, "total": 0}
+
+        authors[author]["insertions"] += insertions
+        authors[author]["deletions"] += deletions
+        authors[author]["total"] += total
+
+    return authors
+
+def changes_per_files(commits, top_n: int = 10):
+    file_stats = {}
+
+    for c in commits:
+        if len(c.parents) > 1: 
+            continue
+
+        for filename, stats in c.stats.files.items():
+            if not utils.is_text_file(filename):
+                continue
+
+            if filename not in file_stats:
+                file_stats[filename] = {"insertions": 0, "deletions": 0, "total": 0, "changes": 0}
+            file_stats[filename]["insertions"] += stats["insertions"]
+            file_stats[filename]["deletions"] += stats["deletions"]
+            file_stats[filename]["total"] += stats["lines"]
+            file_stats[filename]["changes"] += 1
+
+    sorted_files = dict(sorted(file_stats.items(), key=lambda x: x[1]["total"], reverse=True)[:top_n])
+    return sorted_files
