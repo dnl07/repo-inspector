@@ -1,3 +1,5 @@
+from . import utils
+
 def commits_per_day(commits):
     counts = {}
 
@@ -34,9 +36,10 @@ def lines_per_day(commits):
 
 def lines_per_author(commits):
     authors = {}
+    names = utils.normalize_authors(commits)
 
     for c in commits:
-        author = c.author.name
+        author = names[c.author.email.lower()]
         stats = c.stats.total
 
         if author not in authors:
