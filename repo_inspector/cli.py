@@ -35,6 +35,12 @@ def run_cli() -> argparse.Namespace:
         type=str,
         help="Comma-separated list of authors"
     )
+    # Filter by branches
+    parser.add_argument(
+        "-b", "--branches",
+        type=str,
+        help="Comma-separated list of branches to analyze, or 'all' for all branches"
+    )
     # Plotting output
     parser.add_argument(
         "-p", "--plot",
