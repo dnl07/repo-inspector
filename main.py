@@ -1,8 +1,9 @@
-from gitinspector.cli import run_cli
-from gitinspector.analyzer import analyze_repository
-import gitinspector.utils as utils
-import gitinspector.plotting as plot
 from git import Repo, InvalidGitRepositoryError
+from repo_inspector.cli import run_cli
+from repo_inspector.repository import get_commits
+import repo_inspector.analysis as analysis
+import repo_inspector.plot as plot
+import repo_inspector.utils as utils
 
 def main() -> None:
     args = run_cli()
@@ -19,13 +20,18 @@ def main() -> None:
     utils.check_datetime(args.since)
     utils.check_datetime(args.until)
 
-    analyzed = analyze_repository(repo, args.metric, args.since, args.until, args.authors)
+    commits = get_commits(repo, args.since, args.until, args.authors)
 
     if (args.plot):
         if (args.metric == "commits"):
-            plot.plot_commit_timeline(analyzed, args.save)
-        if (args.metric == "lines"):
-            plot.plot_lines_timeline(analyzed, args.save)
+            dates, count = analysis.commits_per_day(commits)
+            plot.plot_commit_timeline(dates, count, args.save)
+        elif (args.metric == "lines"):
+            dates, insertions, deletions, total_lines = analysis.lines_per_day(commits)
+            plot.plot_lines_timeline(dates, insertions, deletions, total_lines, args.save)
+        elif (args.metric == "authors"):
+            author_stats = analysis.lines_per_author(commits)
+            plot.plot_author_pie(author_stats, args.save)
 
 if __name__ == "__main__":
     main()

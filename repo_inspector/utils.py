@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 def check_datetime(date_str: str) -> None:
     if date_str is None:
@@ -11,3 +12,6 @@ def check_datetime(date_str: str) -> None:
 
 def split_authors(authors: str) -> list[str]:
     return []
+
+def extract_github_username(email: str) -> str:
+    m = re.match(r"")
