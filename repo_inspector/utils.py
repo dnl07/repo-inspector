@@ -11,6 +11,7 @@ def check_datetime(date_str: str) -> None:
     except ValueError:
         raise ValueError(f"{date_str} is not a valid date") 
 
+# collects most used names, because sometimes different names appear with same emails
 def normalize_authors(commits):
     email_to_names = {}
 

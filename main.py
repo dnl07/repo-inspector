@@ -42,7 +42,14 @@ def main() -> None:
             plot.plot_author_bar(author_stats, args.save)
         elif (args.metric == "files"):
             author_stats = analysis.changes_per_files(commits)
-            plot.plot_files_bar(author_stats, args.save)
-
+            plot.plot_files_lines_bar(author_stats, args.save)
+            plot.plot_files_changes_bar(author_stats, args.save)
+        elif (args.metric == "rhythm"):
+            weekdays = analysis.commits_per_weekday(commits)
+            hours = analysis.commits_per_hour(commits)
+            heat_matrix = analysis.commits_heatmap(commits)
+            plot.plot_weekday_rhythm(weekdays, args.save)
+            plot.plot_hours_rhythm(hours, args.save)
+            plot.plot_heatmap_rhythm(heat_matrix, args.save)
 if __name__ == "__main__":
     main()

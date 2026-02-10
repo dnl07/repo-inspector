@@ -1,4 +1,5 @@
 from . import utils
+import numpy as np
 
 def commits_per_day(commits):
     counts = {}
@@ -97,3 +98,40 @@ def changes_per_files(commits, top_n: int = 10):
 
     sorted_files = dict(sorted(file_stats.items(), key=lambda x: x[1]["total"], reverse=True)[:top_n])
     return sorted_files
+
+def commits_per_weekday(commits):
+    weekday_counts = {i: 0 for i in range(7)}
+
+    for c in commits:
+        if len(c.parents) > 1: 
+            continue        
+
+        wd = c.committed_datetime.weekday()
+        weekday_counts[wd] += 1
+    
+    return weekday_counts
+
+def commits_per_hour(commits):
+    hour_counts = {h: 0 for h in range(24)}
+
+    for c in commits:
+        if len(c.parents) > 1: 
+            continue        
+
+        h = c.committed_datetime.hour
+        hour_counts[h] += 1
+    
+    return hour_counts
+
+def commits_heatmap(commits):
+    heat = np.zeros((7, 24), dtype=int)
+
+    for c in commits:
+        if len(c.parents) > 1: 
+            continue        
+
+        wd = c.committed_datetime.weekday()
+        h = c.committed_datetime.hour
+        heat[wd, h] += 1
+    
+    return heat    

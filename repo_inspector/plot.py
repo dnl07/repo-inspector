@@ -1,6 +1,7 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
+from .constants import WEEKDAYS
 
 def plot_commit_timeline(dates, counts, save_path: Path | None = None):
     plt.figure(figsize=(10, 5))
@@ -65,7 +66,7 @@ def plot_author_bar(author_stats, save_path: Path | None = None):
     else:
         plt.show()
 
-def plot_files_bar(file_stats, save_path: Path | None = None):
+def plot_files_lines_bar(file_stats, save_path: Path | None = None):
     files = list(file_stats.keys())
     x = np.arange(len(files))
 
@@ -88,3 +89,85 @@ def plot_files_bar(file_stats, save_path: Path | None = None):
         plt.savefig(save_path)
     else:
         plt.show()        
+
+def plot_files_changes_bar(file_stats, save_path: Path | None = None):
+    files = list(file_stats.keys())
+    x = np.arange(len(files))
+
+    changes = [file_stats[f]["changes"] for f in files]
+
+    plt.figure(figsize=(12, 8))
+
+    p2 = plt.bar(x, changes, label="Changes")
+
+    plt.title("Most changed files")
+    plt.xticks(x, files, rotation=45, ha="right")
+    plt.legend()
+
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()   
+
+def plot_weekday_rhythm(weekday_counts, save_path=None):
+    days = list(weekday_counts.keys())
+    counts = [weekday_counts[d] for d in days]
+
+    plt.figure(figsize=(10,5))
+    plt.bar(days, counts)
+    plt.xticks(days, WEEKDAYS)
+    plt.title("Commits per weekday")
+    plt.xlabel("Weekday")
+    plt.ylabel("Commits")
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()    
+
+def plot_weekday_rhythm(weekday_counts, save_path=None):
+    days = list(weekday_counts.keys())
+    counts = [weekday_counts[d] for d in days]
+
+    plt.figure(figsize=(10,5))
+    plt.bar(days, counts)
+    plt.xticks(days, WEEKDAYS)
+    plt.title("Commits per weekday")
+    plt.xlabel("Weekday")
+    plt.ylabel("Commits")
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()  
+
+def plot_hours_rhythm(hour_counts, save_path=None):
+    hours = list(hour_counts.keys())
+    counts = [hour_counts[h] for h in hours]
+
+    plt.figure(figsize=(10,5))
+    plt.bar(hours, counts)
+    plt.xticks(hours)
+    plt.title("Commits per hour")
+    plt.xlabel("Hours")
+    plt.ylabel("Commits")
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()
+
+def plot_heatmap_rhythm(heat_matrix, save_path=None):
+    plt.figure(figsize=(12,5))
+    plt.imshow(heat_matrix, aspect="auto")
+
+    plt.yticks(range(7), WEEKDAYS)
+    plt.xticks(range(24), range(24))
+    plt.title("Weekly commit heatmap")
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()

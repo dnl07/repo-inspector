@@ -14,7 +14,7 @@ def run_cli() -> argparse.Namespace:
     # Which metric to compute
     parser.add_argument(
         "-m", "--metric",
-        choices=["commits", "lines", "authors", "files"],
+        choices=["commits", "lines", "authors", "files", "rhythm"],
         default="commits",
         help="Metric to analyze"
     )
