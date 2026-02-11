@@ -1,10 +1,11 @@
 from git import Repo, InvalidGitRepositoryError
+import matplotlib.pyplot as plt
+from pathlib import Path
 from repo_inspector.cli import run_cli
 from repo_inspector.repository import get_commits
 import repo_inspector.utils as utils
 from repo_inspector.analysis import ANALYZERS
 from repo_inspector.plot import PLOTTERS, PLOT_OPTIONS
-import matplotlib.pyplot as plt
 
 def main() -> None:
     args = run_cli()
@@ -45,12 +46,20 @@ def main() -> None:
             if p not in available:
                 raise ValueError(f"Plot '{p}' is not valid for metric '{args.metric}'. Valid plots: {', '.join(available)}")
 
-            plot_func = plotter = PLOTTERS[args.metric][p]
-            plot_func(result)
+            fig = PLOTTERS[args.metric][p](result)
 
-    
+            if args.save_dir and args.ext:
+                output_path = Path(args.save_dir)
+                output_path.mkdir(parents=True, exist_ok=True)
 
-    plt.show()
+                filename = f"{args.metric}_{p}.{args.ext}"
+                save_path = output_path / filename
+
+                fig.savefig(save_path, bbox_inches="tight")    
+
+        if not args.save_dir:
+            plt.show()
+
 
 if __name__ == "__main__":
     main()
