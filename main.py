@@ -60,6 +60,5 @@ def main() -> None:
         if not args.save_dir:
             plt.show()
 
-
 if __name__ == "__main__":
     main()

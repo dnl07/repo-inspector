@@ -15,8 +15,7 @@ def lines_per_files(commits, top_k: int = 25):
                 file_stats[filename] = {"insertions": 0, "deletions": 0, "total": 0, "changes": 0}
             file_stats[filename]["insertions"] += stats["insertions"]
             file_stats[filename]["deletions"] += stats["deletions"]
-            file_stats[filename]["total"] += stats["lines"]
-            file_stats[filename]["changes"] += 1
+            file_stats[filename]["total"] += stats["insertions"] + stats["deletions"]
 
     # Sort all
     sorted_files = sorted(file_stats.keys(), key=lambda f: file_stats[f]["total"], reverse=True)
