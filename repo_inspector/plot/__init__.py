@@ -10,20 +10,35 @@ from .rhythm import (
 from .messages import plot_top_words
 
 PLOTTERS = {
-    "commits": lambda data: plot_commit_timeline(*data),
-    "lines": lambda data: plot_lines_timeline(*data),
-    "authors": lambda data: (
-        plot_author_bar(*data),
-        plot_author_pie(*data)
-    ),
-    "files": lambda data: (
-        plot_files_changes_bar(*data),
-        plot_files_lines_bar(*data)
-    ),
-    "rhythm": lambda data: (
-        plot_weekday_rhythm(*data),
-        plot_hours_rhythm(*data),
-        plot_heatmap_rhythm(*data)
-    ), 
-    "messages": lambda data: plot_top_words(data),
+    "commits": {
+        "timeline": lambda data: plot_commit_timeline(*data)
+    },
+    "lines": {
+        "timeline": lambda data: plot_lines_timeline(*data)
+    },
+    "authors": {
+        "pie": lambda data: plot_author_pie(data[0]),
+        "bar": lambda data: plot_author_bar(data[0])
+    },
+    "files": {
+        "lines": lambda data: plot_files_lines_bar(*data[0]),
+        "changes": lambda data: plot_files_changes_bar(*data[1])
+    },
+    "rhythm": {
+        "weekly": lambda data: plot_weekday_rhythm(data[0]),
+        "hourly": lambda data: plot_hours_rhythm(data[1]),
+        "heatmap": lambda data: plot_heatmap_rhythm(data[2])
+    },
+    "messages": {
+        "bar": lambda data: plot_top_words(data)
+    }
+}
+
+PLOT_OPTIONS = {
+    "commits": ["timeline"],
+    "lines": ["timeline"],
+    "authors": ["pie", "bar"],
+    "files": ["lines", "changes"],
+    "rhythm": ["weekly", "hourly", "heatmap"],
+    "messages": ["bar"]
 }

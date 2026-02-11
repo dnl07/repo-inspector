@@ -46,13 +46,20 @@ def run_cli() -> argparse.Namespace:
         "-p", "--plot",
         type=str,
         default=None,
-        help="Which plot to generate (bar, pie, lines, heatmap, weekly, hourly, all)"
+        help="Which plot to generate (bar, pie, timeline, heatmap, weekly, hourly, all)"
     )
-    # Save output to a file
+    # Save output in a directory
     parser.add_argument(
-        "--save",
+        "--save-dir",
         type=Path,
-        help="Save plot or metrics to a file (e.g., output.png or data.json)"
+        help="Directory to save generated plots"
     )
-
+    # Output extension
+    parser.add_argument(
+        "--ext",
+        type=str,
+        default="png",
+        choices=["png", "svg", "pdf"],
+        help="Output file format for saved plots"
+    )
     return parser.parse_args()

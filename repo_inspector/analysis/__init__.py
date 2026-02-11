@@ -1,7 +1,7 @@
 from .commits import commits_per_day
 from .lines import lines_per_day
 from .authors import lines_per_author, commits_per_author
-from .files import changes_per_files
+from .files import lines_per_files, changes_per_files
 from .rhythm import (
     commits_per_weekday,
     commits_per_hour,
@@ -16,7 +16,10 @@ ANALYZERS = {
         lines_per_author(c),
         commits_per_author(c)
     ),
-    "files": changes_per_files,
+    "files": lambda c: (
+        lines_per_files(c),
+        changes_per_files(c)
+    ),
     "rhythm": lambda c: (
         commits_per_weekday(c),
         commits_per_hour(c),

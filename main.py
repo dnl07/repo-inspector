@@ -3,8 +3,9 @@ from repo_inspector.cli import run_cli
 from repo_inspector.repository import get_commits
 import repo_inspector.utils as utils
 from repo_inspector.analysis import ANALYZERS
-from repo_inspector.plot import PLOTTERS
+from repo_inspector.plot import PLOTTERS, PLOT_OPTIONS
 import matplotlib.pyplot as plt
+
 def main() -> None:
     args = run_cli()
 
@@ -33,8 +34,19 @@ def main() -> None:
     result = analyzer(commits)
 
     if args.plot:
-        plotter = PLOTTERS[args.metric]
-        figs = plotter(result)
+        available = PLOT_OPTIONS[args.metric]
+
+        if args.plot == "all":
+            selected_plots = available
+        else:
+            selected_plots = args.plot.replace(" ", "").split(",")
+
+        for p in selected_plots:
+            if p not in available:
+                raise ValueError(f"Plot '{p}' is not valid for metric '{args.metric}'. Valid plots: {', '.join(available)}")
+
+            plot_func = plotter = PLOTTERS[args.metric][p]
+            plot_func(result)
 
     
 
