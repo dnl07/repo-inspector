@@ -1,0 +1,26 @@
+from .commits import commits_per_day
+from .lines import lines_per_day
+from .authors import lines_per_author, commits_per_author
+from .files import changes_per_files
+from .rhythm import (
+    commits_per_weekday,
+    commits_per_hour,
+    commits_heatmap
+)
+from .messages import top_words
+
+ANALYZERS = {
+    "commits": commits_per_day,
+    "lines": lines_per_day,
+    "authors": lambda c: (
+        lines_per_author(c),
+        commits_per_author(c)
+    ),
+    "files": changes_per_files,
+    "rhythm": lambda c: (
+        commits_per_weekday(c),
+        commits_per_hour(c),
+        commits_heatmap(c)
+    ),    
+    "messages": top_words
+}

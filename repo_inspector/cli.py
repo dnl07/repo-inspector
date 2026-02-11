@@ -44,8 +44,9 @@ def run_cli() -> argparse.Namespace:
     # Plotting output
     parser.add_argument(
         "-p", "--plot",
-        action="store_true",
-        help="Generate a plot of the selected metric"
+        type=str,
+        default=None,
+        help="Which plot to generate (bar, pie, lines, heatmap, weekly, hourly, all)"
     )
     # Save output to a file
     parser.add_argument(
