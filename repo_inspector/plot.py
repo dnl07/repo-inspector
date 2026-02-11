@@ -171,3 +171,20 @@ def plot_heatmap_rhythm(heat_matrix, save_path=None):
         plt.savefig(save_path)
     else:
         plt.show()
+
+def plot_top_words(top_words, save_path=None):
+    words = [w[0] for w in top_words]
+    counts = [w[1] for w in top_words]
+    x = np.arange(len(words))
+
+    plt.figure(figsize=(10,5))
+    plt.bar(words, counts)
+    plt.xticks(x, words, rotation=45, ha="right")
+    plt.title("Most used words in commit messages")
+    plt.xlabel("Weekday")
+    plt.ylabel("Commits")
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()   

@@ -51,5 +51,8 @@ def main() -> None:
             plot.plot_weekday_rhythm(weekdays, args.save)
             plot.plot_hours_rhythm(hours, args.save)
             plot.plot_heatmap_rhythm(heat_matrix, args.save)
+        elif (args.metric == "messages"):
+            top_words = analysis.top_words(commits)
+            plot.plot_top_words(top_words, args.save)
 if __name__ == "__main__":
     main()
