@@ -50,6 +50,8 @@ def plot_hours_rhythm(hour_counts):
     ax.spines['right'].set_visible(False)
     ax.legend()
     fig.tight_layout()
+    
+    return fig
 
 def plot_heatmap_rhythm(heat_matrix):
     fig, ax = plt.subplots(figsize=(12,5))
