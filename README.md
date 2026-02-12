@@ -29,11 +29,23 @@ You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the 
 ```python main.py --repo "path/to/repository"```
 
 ### With docker
+You can run it inside a Docker container to avoid installing dependencies locally.
+
 - Build the image with the already contained dockerfile:
 ```docker build -t repo-inspector .```
-- Run the container:
-```docker run -v "path/to/repository:/repo"  -v "path/to/output:/output" repo-inspector python main.py --repo /repo --save-dir /output```
-You need to mount these directories because Docker has no access to your host filesystem by default. Both paths must be passed using ```-v```.
+
+- Run a bash session inside the container, mounting your chosen repository and output directories:
+```docker run -v "path/to/repository:/repo" -v "path/to/output:/output" -it repo-inspector bash```
+
+<em>Note: You need to mount these directories because Docker has no access to your host filesystem by default. Both paths must be passed using ```-v```.</em>
+Example: ```docker run -v "$(pwd):/repo" -v "$(pwd):/output" -it repo-inspector bash```, which uses this repo and saves the output plots in the same directory.
+
+
+- Mark the repository as safe inside the container:
+```git config --global --add safe.directory /repo```
+
+- Run the CLI inside the container. For example, to analyze the "lines" metric and generate all plots:
+```python main.py --repo /repo -m "lines" --plot "all" --output-dir /output```
 
 ## How to use
 
