@@ -1,10 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/nkxJlVK3)
 
 # Git Repository Inspector
----
 
 ## What is this project about?
----
 This project provides a command-line tool to analyze a local Git repository.  It extracts information such as:
 
 - Commit activity
@@ -16,7 +14,6 @@ This project provides a command-line tool to analyze a local Git repository.  It
 You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the extracted metrics.
 
 ## Installation
----
 ### Without docker
 
 - Requirements:
@@ -39,7 +36,6 @@ You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the 
 You need to mount these directories because Docker has no access to your host filesystem by default. Both paths must be passed using ```-v```.
 
 ## How to use
----
 
 ### CLI-Arguments
 
