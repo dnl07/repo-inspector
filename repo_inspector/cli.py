@@ -8,6 +8,7 @@ def run_cli() -> argparse.Namespace:
     # Repository path
     parser.add_argument(
         "-r", "--repo",
+        required=True,
         type=Path,
         help="Path to a repository"
     )
@@ -50,7 +51,7 @@ def run_cli() -> argparse.Namespace:
     )
     # Save output in a directory
     parser.add_argument(
-        "--save-dir",
+        "--output-dir",
         type=Path,
         help="Directory to save generated plots"
     )

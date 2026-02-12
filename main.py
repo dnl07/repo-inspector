@@ -48,8 +48,8 @@ def main() -> None:
 
             fig = PLOTTERS[args.metric][p](result)
 
-            if args.save_dir and args.ext:
-                output_path = Path(args.save_dir)
+            if args.output_dir and args.ext:
+                output_path = Path(args.output_dir)
                 output_path.mkdir(parents=True, exist_ok=True)
 
                 filename = f"{args.metric}_{p}.{args.ext}"
@@ -57,7 +57,7 @@ def main() -> None:
 
                 fig.savefig(save_path, bbox_inches="tight")    
 
-        if not args.save_dir:
+        if not args.output_dir:
             plt.show()
 
 if __name__ == "__main__":

@@ -47,3 +47,29 @@ ENV/
 Thumbs.db
 
 wip/
+
+# LaTeX auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+
+# latexmk
+*.fdb_latexmk
+*.fls
+
+# Temporary files
+*.synctex.gz
+*.synctex(busy)
+*.bbl
+*.blg
+*.run.xml
+*.bcf
