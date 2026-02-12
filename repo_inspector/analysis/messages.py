@@ -1,4 +1,5 @@
 import re
+from ..utils import is_stopword
 
 def top_words(commits, top_k: int = 25):
     word_counts = {}
@@ -13,6 +14,9 @@ def top_words(commits, top_k: int = 25):
         words = msg.split()
 
         for w in words:
+            if is_stopword(w):
+                continue
+
             if w not in word_counts:
                 word_counts[w] = 0
             word_counts[w] += 1

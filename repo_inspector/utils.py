@@ -1,6 +1,6 @@
 from datetime import datetime
 from collections import Counter
-from .constants import EXTENSIONS_WHITELIST
+from .constants import EXTENSIONS_WHITELIST, STOPWORDS
 
 def check_datetime(date_str: str) -> None:
     if date_str is None:
@@ -46,3 +46,6 @@ def get_stats_from_commit(commit):
 
 def is_text_file(filename: str) -> bool:
     return any(filename.lower().endswith(ext) for ext in EXTENSIONS_WHITELIST)
+
+def is_stopword(word: str) -> bool:
+    return word in STOPWORDS
