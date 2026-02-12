@@ -1,6 +1,6 @@
 from datetime import datetime
 from collections import Counter
-from .constants import EXTENSIONS_BLACKLIST
+from .constants import EXTENSIONS_WHITELIST
 
 def check_datetime(date_str: str) -> None:
     if date_str is None:
@@ -45,4 +45,4 @@ def get_stats_from_commit(commit):
     return insertions, deletions, insertions + deletions
 
 def is_text_file(filename: str) -> bool:
-    return not any(filename.lower().endswith(ext) for ext in EXTENSIONS_BLACKLIST)
+    return any(filename.lower().endswith(ext) for ext in EXTENSIONS_WHITELIST)
