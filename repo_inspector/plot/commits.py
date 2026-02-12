@@ -33,6 +33,18 @@ def plot_commit_timeline(commit_data):
     fig, ax = plt.subplots(figsize=(12, 6))
     ax.plot(dates, counts, marker="o", linestyle="-", color="#0273a0", linewidth=2, markersize=4)
 
+    # total commits
+    total_commits = sum(counts)
+    ax.text(
+        0.95, 0.95,
+        f"Total commits: {total_commits}",
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
+        fontsize=10,
+        bbox=dict(facecolor="white", alpha=0.7, edgecolor="none")
+    )
+
     # title and axis
     ax.set_title("Commit frequency over time", weight="bold")
     ax.set_xlabel("Date")

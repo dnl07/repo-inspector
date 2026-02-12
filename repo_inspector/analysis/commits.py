@@ -7,6 +7,9 @@ def commits_per_day(commits):
     year_counter = Counter()
 
     for c in commits:
+        if len(c.parents) > 1:
+            continue
+
         dt = c.committed_datetime
         d = dt.date()
 

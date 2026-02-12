@@ -38,7 +38,7 @@ def plot_hours_rhythm(hour_counts):
     ax.bar(x, counts, width=width, color="#0273a0", label="Commits")
 
     # Title and axis
-    ax.set_title("Commits per hour")
+    ax.set_title("Commits per hour (UTC±0)")
     ax.set_xticks(x)
     ax.set_xticklabels(hours, rotation=45, ha="right")
     ax.set_xlabel("Hour of the day")

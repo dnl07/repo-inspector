@@ -38,7 +38,7 @@ def plot_lines_timeline(lines_data):
     # title and axis
     ax.set_title("Lines changed over time", weight="bold")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Number of commits")
+    ax.set_ylabel("Number of lines")
 
     # major ticks
     if interval == "days":

@@ -10,11 +10,14 @@ from repo_inspector.plot import PLOTTERS, PLOT_OPTIONS
 def main() -> None:
     args = run_cli()
 
+    print(f"[INFO] Analyzing Repository: {args.repo}")
+
     if not args.repo.exists():
         raise FileNotFoundError(f"The path {args.repo} does not exist")
 
     try:
         repo = Repo(args.repo)
+        print(f"[INFO] Repository successfully loaded: {repo.working_tree_dir}")
     except InvalidGitRepositoryError:
         raise ValueError(f"{args.repo} is not a valid Git repository")
 
@@ -24,15 +27,23 @@ def main() -> None:
 
     if args.branches == "all":
         branches = [b.name for b in repo.branches]
+        print(f"[INFO] Analyzing all branches: {', '.join(branches)}")
     elif args.branches:
         branches = args.branches.replace(" ", "").split(",")
+        print(f"[INFO] Analyzing branches: {', '.join(branches)}")
     else:
         branches = [repo.active_branch.name]
+        print(f"[INFO] Analyzing current branch: {branches[0]}")
 
+    print("[INFO] Loading commits...")
     commits = get_commits(repo, branches, args.since, args.until, args.authors)
+    print(f"[INFO] Found {len(commits)} commits")
 
+    # Analyze metric
+    print(f"[INFO] Computing metric '{args.metric}'...")
     analyzer = ANALYZERS[args.metric]
     result = analyzer(commits)
+    print("[INFO] Analysis complete")
 
     if args.plot:
         available = PLOT_OPTIONS[args.metric]
@@ -46,6 +57,7 @@ def main() -> None:
             if p not in available:
                 raise ValueError(f"Plot '{p}' is not valid for metric '{args.metric}'. Valid plots: {', '.join(available)}")
 
+            print(f"[INFO] Generating plot '{p}' for metric '{args.metric}'...")
             fig = PLOTTERS[args.metric][p](result)
 
             if args.output_dir and args.ext:
@@ -56,8 +68,10 @@ def main() -> None:
                 save_path = output_path / filename
 
                 fig.savefig(save_path, bbox_inches="tight")    
+                print(f"[INFO] Plot saved: {save_path}")
 
         if not args.output_dir:
+            print("[INFO] Displaying plots...")
             plt.show()
 
 if __name__ == "__main__":

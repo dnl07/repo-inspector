@@ -1,40 +1,20 @@
-EXTENSIONS_WHITELIST = {
-    # Python
-    ".py", ".pyi", ".pyc", ".pyd", ".pyo",
-    
-    # C/C++
-    ".c", ".cpp", ".cxx", ".h", ".hpp", ".hxx",
-    
-    # Java
-    ".java", ".class", ".jar",
-    
-    # JavaScript/TypeScript
-    ".js", ".jsx", ".ts", ".tsx",
-    
-    # Web
-    ".html", ".htm", ".css", ".scss", ".less", ".xml", ".xhtml",
-    
-    # Shell
-    ".sh", ".bash", ".zsh", ".bat", ".ps1", ".cmd", ".ksh", ".fish",
-    
-    # Ruby, Perl, PHP
-    ".rb", ".pl", ".pm", ".php",
-    
-    # Go, Rust
-    ".go", ".rs",
-    
-    # Kotlin, Swift
-    ".kt", ".kts", ".swift",
-    
-    # Text files and documentation
-    ".txt", ".md", ".markdown", ".rst", ".tex", ".bib", ".csv", ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".log",
-    
-    # SQL
-    ".sql", ".db", ".sqlite", ".sqlite3",
+EXTENSIONS_WHITELIST = [
+    # Source code
+    ".py", ".c", ".cpp", ".cxx", ".h", ".hpp", ".hxx",
+    ".java", ".js", ".jsx", ".ts", ".tsx",
+    ".go", ".rs", ".kt", ".kts", ".swift",
+    ".rb", ".php", ".pl", ".cs",
 
-    # Makefiles & CI
-    "Makefile", "makefile", "Dockerfile", "Jenkinsfile", ".gitignore", ".gitattributes", ".editorconfig",
-}
+    # Web
+    ".html", ".htm", ".css", ".scss",
+
+    # Shell / Scripting
+    ".sh", ".bash", ".zsh", ".ksh", ".fish",
+    ".bat", ".cmd", ".ps1",
+
+    # Documentation
+    ".txt", ".md", ".markdown", ".rst", ".tex", ".bib"
+]
 
 WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 

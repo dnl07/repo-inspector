@@ -5,7 +5,7 @@ def plot_files_lines_bar(files, insertions, deletions, total):
     x = np.arange(len(files))
     width = 0.6
 
-    fig, ax = plt.subplots(figsize=(12, 8))
+    fig, ax = plt.subplots(figsize=(16, 8))
 
     # bars
     ax.bar(x, deletions, width=width, label="Deletions", color="salmon")
@@ -27,7 +27,7 @@ def plot_files_lines_bar(files, insertions, deletions, total):
 def plot_files_changes_heatmap(files, changes):
     data = np.array(changes).reshape(-1, 1)
 
-    fig, ax = plt.subplots(figsize=(6, max(4, len(files)*0.3)))
+    fig, ax = plt.subplots(figsize=(12, max(6, len(files)*0.3)))
 
     cax = ax.imshow(data, cmap="Reds", aspect="auto")
 

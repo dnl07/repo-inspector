@@ -5,15 +5,24 @@ def plot_author_pie(author_stats):
     authors = list(author_stats.keys())
     lines = [author_stats[a]["total"] for a in authors]
 
+    updated_authors = []
+    for a in authors:
+        if a.lower() == "others":
+            others_count = author_stats[a]["count"]
+            if others_count is not None:
+                updated_authors.append(f"others ({others_count} authors)")
+        else:
+            updated_authors.append(a)
+
     # colors
     cmap = plt.get_cmap("tab20")
-    colors = [cmap(i) for i in range(len(authors))]
+    colors = [cmap(i) for i in range(len(updated_authors))]
 
     # pie
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.pie(
         lines,
-        labels=authors,
+        labels=updated_authors,
         autopct=lambda pct: f"{pct:.1f}%",
         startangle=140,
         colors=colors,

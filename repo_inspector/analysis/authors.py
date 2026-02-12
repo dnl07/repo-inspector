@@ -21,7 +21,7 @@ def lines_per_author(commits, min_percent=1.0):
     total_lines = sum(a["total"] for a in author_stats.values())
 
     result = {}
-    others = {"insertions": 0, "deletions": 0, "total": 0}
+    others = {"insertions": 0, "deletions": 0, "total": 0, "count": 0}
 
     for author, stats in author_stats.items():
         percent = stats["total"] / total_lines * 100
@@ -29,6 +29,7 @@ def lines_per_author(commits, min_percent=1.0):
             others["insertions"] += stats["insertions"]
             others["deletions"] += stats["deletions"]
             others["total"] += stats["total"]
+            others["count"] += 1
         else:
             result[author] = stats
 
