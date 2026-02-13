@@ -14,7 +14,7 @@ This project provides a command-line tool to analyze a local Git repository.  It
 You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the extracted metrics.
 
 ## Installation
-If you don’t have one yet, clone this repository using `git clone`.
+If you don’t have done yet, clone this repository using `git clone`.
 
 ### Without docker
 
