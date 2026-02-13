@@ -14,6 +14,8 @@ This project provides a command-line tool to analyze a local Git repository.  It
 You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the extracted metrics.
 
 ## Installation
+If you don’t have one yet, clone this repository using `git clone`.
+
 ### Without docker
 
 - Requirements:
@@ -38,6 +40,7 @@ You can run it inside a Docker container to avoid installing dependencies locall
 ```docker run -v "path/to/repository:/repo" -v "path/to/output:/output" -it repo-inspector bash```
 
 <em>Note: You need to mount these directories because Docker has no access to your host filesystem by default. Both paths must be passed using ```-v```.</em>
+
 Example: ```docker run -v "$(pwd):/repo" -v "$(pwd):/output" -it repo-inspector bash```, which uses this repo and saves the output plots in the same directory.
 
 
