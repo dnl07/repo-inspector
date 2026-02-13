@@ -112,3 +112,6 @@ python main.py \
     --output-dir "./plots" \
     --ext svg
 ```
+
+--- 
+For the reviewers: if there are any bugs or problems with running the application, please open an issue on GitHub or send me an email at daniel.baranovskiy07@gmail.com
