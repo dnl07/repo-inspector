@@ -39,7 +39,9 @@ You can run it inside a Docker container to avoid installing dependencies locall
 - Run a bash session inside the container, mounting your chosen repository and output directories:
 ```docker run -v "path/to/repository:/repo" -v "path/to/output:/output" -it repo-inspector bash```
 
-<em>Note: You need to mount these directories because Docker has no access to your host filesystem by default. Both paths must be passed using ```-v```.</em>
+<em>Note: You need to mount these directories because Docker cannot access your host filesystem by default. 
+Both paths must be passed using -v. To simplify access, use :/repo and :/output after your local paths.
+</em>
 
 Example: ```docker run -v "$(pwd):/repo" -v "$(pwd):/output" -it repo-inspector bash```, which uses this repo and saves the output plots in the same directory.
 
@@ -107,8 +109,8 @@ Options: ```png```, ```svg```, ```pdf```
 ```bash
 python main.py \
     --repo "./my-repo" \
-    --metric commits \
-    --plot bar \
+    --metric "commits" \
+    --plot "bar" \
     --output-dir "./plots" \
-    --ext svg
+    --ext "svg"
 ```
