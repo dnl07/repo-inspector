@@ -5,18 +5,23 @@ def run_cli() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Analyze a local git repository and generate metrics or plots"
     )
+    # List available metrics and plots
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List all available metric and plot combinations"
+    )
     # Repository path
     parser.add_argument(
         "-r", "--repo",
-        required=True,
         type=Path,
         help="Path to a repository"
     )
     # Which metric to compute
     parser.add_argument(
         "-m", "--metric",
-        choices=["commits", "lines", "authors", "files", "rhythm", "messages"],
-        default="commits",
+        choices=["all", "commits", "lines", "authors", "files", "rhythm", "messages"],
+        default="all",
         help="Metric to analyze"
     )
     # Date ranges
@@ -45,9 +50,8 @@ def run_cli() -> argparse.Namespace:
     # Plotting output
     parser.add_argument(
         "-p", "--plot",
-        type=str,
-        default=None,
-        help="Which plot to generate (bar, pie, timeline, heatmap, weekly, hourly, all)"
+        action="store_true",
+        help="Generate plots for the selected metric"
     )
     # Save output in a directory
     parser.add_argument(
@@ -63,4 +67,15 @@ def run_cli() -> argparse.Namespace:
         choices=["png", "svg", "pdf"],
         help="Output file format for saved plots"
     )
-    return parser.parse_args()
+    
+    args = parser.parse_args()
+    
+    # Validate that --repo is provided when not listing
+    if not args.list and not args.repo:
+        parser.error("the following arguments are required: -r/--repo (or use --list to see available options)")
+    
+    return args
+
+
+def print_available_plots():
+    pass

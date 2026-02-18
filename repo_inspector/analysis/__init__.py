@@ -9,6 +9,27 @@ from .rhythm import (
 )
 from .messages import top_words
 
+def analyze_all(commits):
+    return {
+        "commits": commits_per_day(commits),
+        "lines": lines_per_day(commits),
+        "authors": (
+            lines_per_author(commits),
+            commits_per_author(commits)
+        ),
+        "files": (
+            lines_per_files(commits),
+            changes_per_files(commits)
+        ),
+        "rhythm": (
+            commits_per_weekday(commits),
+            commits_per_hour(commits),
+            commits_heatmap(commits)
+        ),
+        "messages": top_words(commits)
+    }
+
+"""Analyze all metrics and return a dictionary with all results."""
 ANALYZERS = {
     "commits": commits_per_day,
     "lines": lines_per_day,
@@ -25,5 +46,6 @@ ANALYZERS = {
         commits_per_hour(c),
         commits_heatmap(c)
     ),    
-    "messages": top_words
+    "messages": top_words,
+    "all": analyze_all
 }

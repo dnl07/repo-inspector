@@ -114,3 +114,8 @@ python main.py \
     --output-dir "./plots" \
     --ext "svg"
 ```
+
+## Changes after the reviews
+
+- Removed plot options: --plot as boolean is enough, choosing the type like "bar" or "pie" is not necessary and confuses the user
+- Added "all" options to --metric to plot everything this tool can
