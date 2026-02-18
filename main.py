@@ -1,30 +1,39 @@
 from git import Repo, InvalidGitRepositoryError
 import matplotlib.pyplot as plt
 from pathlib import Path
-from repo_inspector.cli import run_cli, print_available_plots
+from repo_inspector.cli import run_cli, print_examples
 from repo_inspector.repository import get_commits
 import repo_inspector.utils as utils
 from repo_inspector.analysis import ANALYZERS
 from repo_inspector.plot import PLOTTERS
+import sys
+import repo_inspector.print as printer
 
 def main() -> None:
     args = run_cli()
 
+    # Validate that --repo is provided when not listing
+    if not args.list and not args.repo:
+        printer.error("The following arguments are required: -r/--repo (or use --list to see available options)")
+        sys.exit(1)
+    
     # If --list flag is provided, display available options and exit
     if args.list:
-        print_available_plots()
+        print_examples()
         return
 
-    print(f"[INFO] Analyzing Repository: {args.repo}")
+    printer.info(f"Analyzing Repository: {args.repo}")
 
     if not args.repo.exists():
-        raise FileNotFoundError(f"The path {args.repo} does not exist")
+        printer.error("The specified repository path does not exist.")
+        sys.exit(1)
 
     try:
         repo = Repo(args.repo)
-        print(f"[INFO] Repository successfully loaded: {repo.working_tree_dir}")
+        printer.info(f"Repository successfully loaded: {repo.working_tree_dir}")
     except InvalidGitRepositoryError:
-        raise ValueError(f"{args.repo} is not a valid Git repository")
+        printer.error(f"The path {args.repo} is not a valid Git repository.")
+        sys.exit(1)
 
     # check if given date is valid
     utils.check_datetime(args.since)
@@ -32,30 +41,33 @@ def main() -> None:
 
     if args.branches == "all":
         branches = [b.name for b in repo.branches]
-        print(f"[INFO] Analyzing all branches: {', '.join(branches)}")
+        printer.info(f"Analyzing all branches: {', '.join(branches)}")
     elif args.branches:
         branches = args.branches.replace(" ", "").split(",")
-        print(f"[INFO] Analyzing branches: {', '.join(branches)}")
+        printer.info(f"Analyzing branches: {', '.join(branches)}")
     else:
         branches = [repo.active_branch.name]
-        print(f"[INFO] Analyzing current branch: {branches[0]}")
+        printer.info(f"Analyzing current branch: {branches[0]}")
 
-    print("[INFO] Loading commits...")
+    printer.info("Loading commits...")
     commits = get_commits(repo, branches, args.since, args.until, args.authors)
-    print(f"[INFO] Found {len(commits)} commits")
+    printer.success(f"Found {len(commits)} commits")
 
     # Analyze metric
-    print(f"[INFO] Computing metric '{args.metric}'...")
+    printer.info(f"Computing metric '{args.metric}'...")
     analyzer = ANALYZERS[args.metric]
     result = analyzer(commits)
-    print("[INFO] Analysis complete")
+    printer.success("Analysis complete")
 
     # Generate all plots for the metric
     if args.plot:
-        print(f"[INFO] Generating plot for metric '{args.metric}'...")
+        printer.info(f"Generating plot for metric '{args.metric}'...")
         figs = PLOTTERS[args.metric](result)
 
-        for i, (label, fig) in enumerate(figs):
+        if not isinstance(figs, list):
+            figs = [figs]
+
+        for (label, fig) in figs:
             if args.output_dir and args.ext:
                 output_path = Path(args.output_dir)
                 output_path.mkdir(parents=True, exist_ok=True)
@@ -64,8 +76,9 @@ def main() -> None:
                 save_path = output_path / filename
 
                 fig.savefig(save_path, bbox_inches="tight")
-                print(f"[INFO] Plot saved: {save_path}")
+                printer.success(f"Plot saved: {save_path}")
             else:
+                printer.info("Displaying plots...")
                 plt.show()
 
 if __name__ == "__main__":

@@ -1,6 +1,8 @@
 from datetime import datetime
 from collections import Counter
 from .constants import EXTENSIONS_WHITELIST, STOPWORDS
+from .print import error
+import sys
 
 def check_datetime(date_str: str) -> None:
     if date_str is None:
@@ -9,7 +11,8 @@ def check_datetime(date_str: str) -> None:
     try:
         datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
-        raise ValueError(f"{date_str} is not a valid date") 
+        error(f"The date {date_str} is not a valid date (YYYY-MM-DD).")
+        sys.exit(1)
 
 # collects most used names, because sometimes different names appear with same emails
 def normalize_authors(commits):

@@ -69,13 +69,21 @@ def run_cli() -> argparse.Namespace:
     )
     
     args = parser.parse_args()
-    
-    # Validate that --repo is provided when not listing
-    if not args.list and not args.repo:
-        parser.error("the following arguments are required: -r/--repo (or use --list to see available options)")
-    
     return args
 
+# Display some examples
+def print_examples():    
+    print("\n" + "="*25)
+    print("USAGE")
+    print("="*25 + "\n")
 
-def print_available_plots():
-    pass
+    print(f"Plot all metrics with: python main.py -r <repo> -m all -p\n")
+    
+    print("="*70)
+    print("Example metrics:")
+    print("  python main.py -r . -m commits -p")
+    print("  python main.py -r . -m authors -p")
+    print("  python main.py -r . -m lines -p")
+    print("="*70 + "\n")
+    print("Save the plots with:")
+    print("  python main.py -r . -m commits -p --output-dir 'output/' --ext png\n")
