@@ -132,3 +132,7 @@ python3 main.py --repo "https://github.com/freiburg-missing-semester-course/proj
 - Branch handling: commits from each branch are now analyzed and plotted separately, rather than being merged together.
 
 - Added support for repository URLs as an input option.
+
+- Updated this file to show more examples
+
+- Fixed filtering by authors: Now names with a space within work too
