@@ -39,6 +39,7 @@ def main() -> None:
     utils.check_datetime(args.since)
     utils.check_datetime(args.until)
 
+    # branches
     if args.branches == "all":
         branches = [b.name for b in repo.branches]
         printer.info(f"Analyzing all branches: {', '.join(branches)}")
@@ -49,37 +50,45 @@ def main() -> None:
         branches = [repo.active_branch.name]
         printer.info(f"Analyzing current branch: {branches[0]}")
 
+    # commits
     printer.info("Loading commits...")
-    commits = get_commits(repo, branches, args.since, args.until, args.authors)
-    printer.success(f"Found {len(commits)} commits")
+    branch_commits = get_commits(repo, branches, args.since, args.until, args.authors)
 
-    # Analyze metric
-    printer.info(f"Computing metric '{args.metric}'...")
-    analyzer = ANALYZERS[args.metric]
-    result = analyzer(commits)
-    printer.success("Analysis complete")
+    for entry in branch_commits:
+        branch = entry["branch"]
+        commits = entry["commits"]
 
-    # Generate all plots for the metric
-    if args.plot:
-        printer.info(f"Generating plot for metric '{args.metric}'...")
-        figs = PLOTTERS[args.metric](result)
+        printer.success(f"Found {len(commits)} commits in branch '{branch}'")
 
-        if not isinstance(figs, list):
-            figs = [figs]
+        # Analyze metric
+        printer.info(f"Computing metric '{args.metric}'...")
+        analyzer = ANALYZERS[args.metric]
+        result = analyzer(commits)
+        printer.success("Analysis complete")
 
-        for (label, fig) in figs:
-            if args.output_dir and args.ext:
-                output_path = Path(args.output_dir)
-                output_path.mkdir(parents=True, exist_ok=True)
+        # Generate all plots for the metric
+        if args.plot:
+            printer.info(f"Generating plot for metric '{args.metric}'...")
+            figs = PLOTTERS[args.metric](result)
 
-                filename = f"{label}.{args.ext}"
-                save_path = output_path / filename
+            if not isinstance(figs, list):
+                figs = [figs]
 
-                fig.savefig(save_path, bbox_inches="tight")
-                printer.success(f"Plot saved: {save_path}")
-            else:
-                printer.info("Displaying plots...")
-                plt.show()
+            for (label, fig) in figs:
+                if args.output_dir and args.ext:
+                    output_path = Path(args.output_dir)
+                    output_path.mkdir(parents=True, exist_ok=True)
+
+                    filename = f"{label}_{branch}.{args.ext}"
+                    save_path = output_path / filename
+
+                    fig.savefig(save_path, bbox_inches="tight")
+                    printer.success(f"Plot saved: {save_path}")
+                    plt.close(fig)
+                else:
+                    printer.info("Displaying plots...")
+                    plt.show()
+                    plt.close(fig)
 
 if __name__ == "__main__":
     main()
