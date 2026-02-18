@@ -13,6 +13,12 @@ This project provides a command-line tool to analyze a local Git repository.  It
 
 You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the extracted metrics.
 
+Example with ```python3 main.py --repo "." --plot -m "lines" --output-dir "./plots_md"```:
+<figure>
+  <img src="./plots_md/lines_timeline_main.png" alt="Example image" style="width:50%;">
+  <figcaption>Figure 1: Lines changed over time (2026-02-18 20:58).</figcaption>
+</figure>
+
 ## Installation
 If you don’t have done yet, clone this repository using `git clone`.
 
@@ -24,11 +30,11 @@ If you don’t have done yet, clone this repository using `git clone`.
   - Git installed on the system
   - pip packages (see below)
 
-- Install dependencies:
+- Install dependencies (with venv or another environment):
 ```pip install -r requirements.txt```
 
 - Run locally:
-```python main.py --repo "path/to/repository"```
+```python3 main.py --repo "path/to/repository"```
 
 ### With docker
 You can run it inside a Docker container to avoid installing dependencies locally.
@@ -46,11 +52,11 @@ Both paths must be passed using -v. To simplify access, use :/repo and :/output 
 Example: ```docker run -v "$(pwd):/repo" -v "$(pwd):/output" -it repo-inspector bash```, which uses this repo and saves the output plots in the same directory.
 
 
-- Mark the repository as safe inside the container:
+- **IMPORTANT**: Mark the repository as safe inside the container:
 ```git config --global --add safe.directory /repo```
 
-- Run the CLI inside the container. For example, to analyze the "lines" metric and generate all plots:
-```python main.py --repo /repo -m "lines" --plot "all" --output-dir /output```
+- Run the CLI inside the container. For example, to analyze the "lines" metric and generate all plots (more examples below):
+```python3 main.py --repo /repo -m --plot --output-dir /output```
 
 ## How to use
 
@@ -65,6 +71,7 @@ Path to a valid git repository. <b>This argument is required</b>.
 ```--metric``` or ```-m``` 
 Select the metric to analyze.
 Available choices:
+- ```all```
 - ```commits```
 - ```lines```
 - ```authors```
@@ -87,16 +94,7 @@ Filter commits by author. Expects a comma-seperated list.
 Filter commits by branch. Expects a comma-seperated list.
 
 ```--plot``` or ```-p```:
-Select the plot type to generate.
-
-Available choices:
-- ```bar```
-- ```pie```
-- ```timeline```
-- ```heatmap```
-- ```weekly```
-- ```hourly```
-- ```all```
+Plot the analyzed results.
 
 ```--output-dir```
 Directory where generated plots will be saved.
@@ -105,19 +103,32 @@ Directory where generated plots will be saved.
 Output file format for saved plots.
 Options: ```png```, ```svg```, ```pdf```
 
-### Example
+### Examples
+Plot and save every plot of this repo:
 ```bash
-python main.py \
-    --repo "./my-repo" \
-    --metric "commits" \
-    --plot "bar" \
-    --output-dir "./plots" \
-    --ext "svg"
+python3 main.py --repo "." --p --output-dir "./plots"
 ```
+Plot commits with a url:
+```bash
+python3 main.py --repo "https://github.com/freiburg-missing-semester-course/project-dnl07.git" \
+--metric "commits" -p --output-dir "./plots"
+```
+
+<figure>
+  <img src="./plots_md/commit_timeline_main.png" alt="Example image" style="width:50%;">
+  <figcaption>Figure 2: Commit frequency over time (2026-02-18 20:58).</figcaption>
+</figure>
 
 ## Changes after the reviews
 
-- Removed plot options: --plot as boolean is enough, choosing the type like "bar" or "pie" is not necessary and confuses the user
-- Added "all" options to --metric to plot everything this tool can
-- Added options "--list" to show the user the basic usage in the terminal
-- Improved error handling: Now it is without python traceback and in color
+- Simplified plot options: ```--plot``` is now a simple boolean, selecting a type like “bar” or “pie” is no longer required, reducing confusion.
+
+- Added an all option for ```--metric``` to allow plotting all available metrics at once.
+
+- Added a ```--list``` option to display basic usage instructions directly in the terminal.
+
+- Improved error handling: errors are now displayed without Python tracebacks and in color for better readability.
+
+- Branch handling: commits from each branch are now analyzed and plotted separately, rather than being merged together.
+
+- Added support for repository URLs as an input option.

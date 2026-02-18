@@ -1,8 +1,7 @@
-from git import Repo, InvalidGitRepositoryError
 import matplotlib.pyplot as plt
 from pathlib import Path
 from repo_inspector.cli import run_cli, print_examples
-from repo_inspector.repository import get_commits
+from repo_inspector.repository import get_commits, load_repo
 import repo_inspector.utils as utils
 from repo_inspector.analysis import ANALYZERS
 from repo_inspector.plot import PLOTTERS
@@ -22,24 +21,15 @@ def main() -> None:
         print_examples()
         return
 
+    # Load repository
     printer.info(f"Analyzing Repository: {args.repo}")
+    repo, tmp_dir = load_repo(args.repo)
 
-    if not args.repo.exists():
-        printer.error("The specified repository path does not exist.")
-        sys.exit(1)
-
-    try:
-        repo = Repo(args.repo)
-        printer.info(f"Repository successfully loaded: {repo.working_tree_dir}")
-    except InvalidGitRepositoryError:
-        printer.error(f"The path {args.repo} is not a valid Git repository.")
-        sys.exit(1)
-
-    # check if given date is valid
+    # Check if given date is valid
     utils.check_datetime(args.since)
     utils.check_datetime(args.until)
 
-    # branches
+    # Branches
     if args.branches == "all":
         branches = [b.name for b in repo.branches]
         printer.info(f"Analyzing all branches: {', '.join(branches)}")
@@ -50,7 +40,7 @@ def main() -> None:
         branches = [repo.active_branch.name]
         printer.info(f"Analyzing current branch: {branches[0]}")
 
-    # commits
+    # Commits
     printer.info("Loading commits...")
     branch_commits = get_commits(repo, branches, args.since, args.until, args.authors)
 
@@ -66,8 +56,15 @@ def main() -> None:
         result = analyzer(commits)
         printer.success("Analysis complete")
 
-        # Generate all plots for the metric
+        # Generate plots
         if args.plot:
+            if args.metric == "all":
+                printer.warning("Plotting all metrics may take a while. Consider selecting a specific metric for faster results.")
+                user_input = input("Do you want to continue? (Y/n) ")
+                if user_input.lower() == "n":
+                    printer.warning("Skipping plot generation.")
+                    continue
+
             printer.info(f"Generating plot for metric '{args.metric}'...")
             figs = PLOTTERS[args.metric](result)
 
@@ -84,11 +81,19 @@ def main() -> None:
 
                     fig.savefig(save_path, bbox_inches="tight")
                     printer.success(f"Plot saved: {save_path}")
-                    plt.close(fig)
                 else:
                     printer.info("Displaying plots...")
                     plt.show()
-                    plt.close(fig)
+    
+    if tmp_dir:
+        try:
+            repo.close()
+        except Exception:
+            pass
+        tmp_dir.cleanup()   
+
+        if Path(tmp_dir.name).exists():
+            printer.warning(f"Temporary directory still exists: {tmp_dir.name}")
 
 if __name__ == "__main__":
     main()

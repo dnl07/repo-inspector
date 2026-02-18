@@ -14,7 +14,7 @@ def run_cli() -> argparse.Namespace:
     # Repository path
     parser.add_argument(
         "-r", "--repo",
-        type=Path,
+        type=str,
         help="Path to a repository"
     )
     # Which metric to compute
