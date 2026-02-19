@@ -52,7 +52,7 @@ Both paths must be passed using -v. To simplify access, use :/repo and :/output 
 Example: ```docker run -v "$(pwd):/repo" -v "$(pwd):/output" -it repo-inspector bash```, which uses this repo and saves the output plots in the same directory.
 
 
-- **IMPORTANT**: Mark the repository as safe inside the container:
+- **IMPORTANT**: If using local repositories, mark the repository as safe inside the container:
 ```git config --global --add safe.directory /repo```
 
 - Run the CLI inside the container. For example, to analyze the "lines" metric and generate all plots (more examples below):
