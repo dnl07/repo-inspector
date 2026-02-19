@@ -1,7 +1,7 @@
 from datetime import datetime
 from collections import Counter
 from .constants import EXTENSIONS_WHITELIST, STOPWORDS
-from .print import error
+from .printer import error
 import sys
 
 def check_datetime(date_str: str) -> None:

@@ -6,7 +6,7 @@ import repo_inspector.utils as utils
 from repo_inspector.analysis import ANALYZERS
 from repo_inspector.plot import PLOTTERS
 import sys
-import repo_inspector.print as printer
+import repo_inspector.printer as printer
 
 def main() -> None:
     args = run_cli()
@@ -23,7 +23,7 @@ def main() -> None:
 
     # Load repository
     printer.info(f"Analyzing Repository: {args.repo}")
-    repo, tmp_dir = load_repo(args.repo)
+    repo, tmp_dir = load_repo(args.repo, args.since)
 
     # Check if given date is valid
     utils.check_datetime(args.since)
@@ -50,6 +50,13 @@ def main() -> None:
 
         printer.success(f"Found {len(commits)} commits in branch '{branch}'")
 
+        if args.metric == "all":
+            printer.warning("Plotting all metrics may take a while. Consider selecting a specific metric for faster results.")
+            user_input = input("Do you want to continue? (Y/n) ")
+            if user_input.lower() == "n":
+                printer.warning("Skipping plot generation.")
+                continue
+
         # Analyze metric
         printer.info(f"Computing metric '{args.metric}'...")
         analyzer = ANALYZERS[args.metric]
@@ -58,13 +65,6 @@ def main() -> None:
 
         # Generate plots
         if args.plot:
-            if args.metric == "all":
-                printer.warning("Plotting all metrics may take a while. Consider selecting a specific metric for faster results.")
-                user_input = input("Do you want to continue? (Y/n) ")
-                if user_input.lower() == "n":
-                    printer.warning("Skipping plot generation.")
-                    continue
-
             printer.info(f"Generating plot for metric '{args.metric}'...")
             figs = PLOTTERS[args.metric](result)
 

@@ -10,6 +10,7 @@ from .rhythm import (
 from .messages import top_words
 
 def analyze_all(commits):
+    """Analyze all metrics and return a dictionary with all results."""
     return {
         "commits": commits_per_day(commits),
         "lines": lines_per_day(commits),
@@ -29,7 +30,6 @@ def analyze_all(commits):
         "messages": top_words(commits)
     }
 
-"""Analyze all metrics and return a dictionary with all results."""
 ANALYZERS = {
     "commits": commits_per_day,
     "lines": lines_per_day,

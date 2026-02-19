@@ -1,10 +1,10 @@
 from git import Repo, GitCommandError
 import sys
-from .print import error, info
+from .printer import error, info
 from pathlib import Path
 import tempfile
 
-def load_repo(path_or_url: str):
+def load_repo(path_or_url: str, since=None):
     if Path(path_or_url).exists():
         try:
             repo = Repo(path_or_url)
@@ -17,7 +17,12 @@ def load_repo(path_or_url: str):
         tmp_dir = tempfile.TemporaryDirectory(prefix="repo_")
         info(f"Cloning repository from {path_or_url} to temporary directory...")
         try:
-            repo = Repo.clone_from(path_or_url, tmp_dir.name)
+            multi_opts = []
+
+            if since:
+                multi_opts.extend(["--shallow-since", since])
+
+            repo = Repo.clone_from(path_or_url, tmp_dir.name, multi_options=multi_opts)
             return repo, tmp_dir
         except Exception:
                 error(f"Failed to clone repository from {path_or_url}. Please check the URL and your network connection.")

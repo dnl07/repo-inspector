@@ -15,7 +15,7 @@ You can generate plots (bar charts, heatmaps, timelines, etc.) to visualize the 
 
 Example with ```python3 main.py --repo "." --plot -m "lines" --output-dir "./plots_md"```:
 <figure>
-  <img src="./plots_md/lines_timeline_main.png" alt="Example image" style="width:50%;">
+  <img src="./plots_md/lines_timeline_main.png" alt="Example image" style="width:80%;">
   <figcaption>Figure 1: Lines changed over time (2026-02-18 20:58).</figcaption>
 </figure>
 
@@ -79,8 +79,6 @@ Available choices:
 - ```rhythm```
 - ```messages```
 
-<em>(Note: Not all metrics support all plot types.)</em>
-
 ```--since```
 Start date in ```(YYYY-MM-DD)``` format
 
@@ -106,16 +104,16 @@ Options: ```png```, ```svg```, ```pdf```
 ### Examples
 Plot and save every plot of this repo:
 ```bash
-python3 main.py --repo "." --p --output-dir "./plots"
+python3 main.py --repo "." -p --output-dir "./plots"
 ```
-Plot commits with a url:
+Plot commits with a url of a public repo:
 ```bash
 python3 main.py --repo "https://github.com/freiburg-missing-semester-course/project-dnl07.git" \
 --metric "commits" -p --output-dir "./plots"
 ```
 
 <figure>
-  <img src="./plots_md/commit_timeline_main.png" alt="Example image" style="width:50%;">
+  <img src="./plots_md/commit_timeline_main.png" alt="Example image" style="width:80%;">
   <figcaption>Figure 2: Commit frequency over time (2026-02-18 20:58).</figcaption>
 </figure>
 
@@ -123,7 +121,7 @@ python3 main.py --repo "https://github.com/freiburg-missing-semester-course/proj
 
 - Simplified plot options: ```--plot``` is now a simple boolean, selecting a type like “bar” or “pie” is no longer required, reducing confusion.
 
-- Added an all option for ```--metric``` to allow plotting all available metrics at once.
+- Added an "all" option for ```--metric``` to allow plotting all available metrics at once.
 
 - Added a ```--list``` option to display basic usage instructions directly in the terminal.
 
@@ -131,7 +129,7 @@ python3 main.py --repo "https://github.com/freiburg-missing-semester-course/proj
 
 - Branch handling: commits from each branch are now analyzed and plotted separately, rather than being merged together.
 
-- Added support for repository URLs as an input option.
+- Added support for repository URLs as an input option (Note: it clones the default branch only).
 
 - Updated this file to show more examples
 

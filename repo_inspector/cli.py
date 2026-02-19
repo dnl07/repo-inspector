@@ -81,9 +81,9 @@ def print_examples():
     
     print("="*70)
     print("Example metrics:")
-    print("  python main.py -r . -m commits -p")
-    print("  python main.py -r . -m authors -p")
-    print("  python main.py -r . -m lines -p")
+    print("  python main.py -r <repo> -m commits -p --since '2026-01-01' --until '2026-02-19'")
+    print("  python main.py -r <repo> -m authors -p --branches 'main,dev'")
+    print("  python main.py -r <repo> -m lines -p --authors 'Alice,Bob'")
     print("="*70 + "\n")
     print("Save the plots with:")
-    print("  python main.py -r . -m commits -p --output-dir 'output/' --ext png\n")
+    print("  python main.py -r <repo> -m commits -p --output-dir <output_dir> --ext png\n")
